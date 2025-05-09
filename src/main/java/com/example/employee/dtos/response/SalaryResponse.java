@@ -9,6 +9,7 @@ import java.time.LocalDate;
 public class SalaryResponse {
     private long id;
     private DataFieldEmployee employee;
+    private String monthYear; // tháng năm
     private BigDecimal baseSalary; // lương cơ ba
     private BigDecimal allowanceAmount; // phụ cấp
     private BigDecimal bonusAmount; // thưởng

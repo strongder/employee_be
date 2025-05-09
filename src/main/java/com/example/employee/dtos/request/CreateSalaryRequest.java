@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Data
 public class CreateSalaryRequest {
     private String employeeCode;
+    private String monthYear; // tháng năm
     private BigDecimal baseSalary; // lương cơ ba
     private BigDecimal allowanceAmount; // phụ cấp
     private BigDecimal bonusAmount; // thưởng

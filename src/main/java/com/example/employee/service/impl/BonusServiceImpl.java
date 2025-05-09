@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -78,5 +80,14 @@ public class BonusServiceImpl extends BaseServiceImpl<Bonus, Long> implements Bo
         return list.stream()
                 .map(bonus -> convertToResponse(bonus, BonusResponse.class))
                 .toList();
+    }
+
+    public BigDecimal calculaorBonusByEmployeeAndDate(String employeeCode, String monthYear) {
+        LocalDate startDate = LocalDate.parse(monthYear + "-01");
+        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+        List<Bonus> list = bonusRepository.findByEmployeeIdAndBonusMonth(employeeCode, startDate, endDate);
+        return list.stream()
+                .map(Bonus::getBonusAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

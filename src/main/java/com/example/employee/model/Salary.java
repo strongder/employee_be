@@ -25,6 +25,7 @@ public class Salary extends BaseEntity{
     private BigDecimal bonusAmount; // thưởng
     private BigDecimal deductionAmount; // khấu trừ
     private BigDecimal totalSalary;     // tổng lương
+    private String monthYear; // tháng năm tính lương
     private LocalDate paymentDate;
     private String status; // "PENDING", "PAID", "CANCELLED"
 }

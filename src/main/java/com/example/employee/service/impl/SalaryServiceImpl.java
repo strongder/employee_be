@@ -3,9 +3,11 @@ package com.example.employee.service.impl;
 import com.example.employee.dtos.request.BaseSearchRequest;
 import com.example.employee.dtos.request.CreateSalaryRequest;
 import com.example.employee.dtos.response.BaseSearchResponse;
+import com.example.employee.dtos.response.CalculatorSalaryResponse;
 import com.example.employee.dtos.response.SalaryResponse;
 import com.example.employee.exception.AppException;
 import com.example.employee.exception.ErrorResponse;
+import com.example.employee.model.EmployeeProfile;
 import com.example.employee.model.Salary;
 import com.example.employee.repository.EmployeeProfileRepository;
 import com.example.employee.repository.SalaryRepository;
@@ -17,6 +19,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SalaryServiceImpl extends BaseServiceImpl<Salary, Long> implements SalaryService {
@@ -29,6 +32,10 @@ public class SalaryServiceImpl extends BaseServiceImpl<Salary, Long> implements 
     SearchUtils<Salary> searchUtils;
     @Autowired
     private EmployeeProfileRepository employeeProfileRepository;
+    @Autowired
+    private BonusServiceImpl bonusServiceImpl;
+    @Autowired
+    private ContractServiceImpl contractServiceImpl;
 
     public SalaryServiceImpl(JpaRepository<Salary, Long> repository) {
         super(repository);
@@ -93,4 +100,17 @@ public class SalaryServiceImpl extends BaseServiceImpl<Salary, Long> implements 
         ).toList();
     }
 
+    public CalculatorSalaryResponse calculateSalary(String employeeCode, String monthYear) {
+        EmployeeProfile employeeProfile = employeeProfileRepository.findByCode(employeeCode)
+                .orElseThrow(() -> new AppException(ErrorResponse.ENTITY_NOT_FOUND));
+        Salary salary = salaryRepository.findByEmployeeAndDate(employeeCode, monthYear).orElse(null);
+        if(salary != null)
+            throw new AppException(ErrorResponse.ENTITY_ALREADY_EXISTS);
+        CalculatorSalaryResponse calculatorSalaryResponse = new CalculatorSalaryResponse();
+        calculatorSalaryResponse.setEmployeeCode(employeeCode);
+        calculatorSalaryResponse.setTotalBonus(bonusServiceImpl.calculaorBonusByEmployeeAndDate(employeeCode, monthYear));
+        calculatorSalaryResponse.setSalary(contractServiceImpl.findById(employeeProfile.getId()).getMonthlySalary());
+        calculatorSalaryResponse.setMonthYear(monthYear);
+        return calculatorSalaryResponse;
+    }
 }

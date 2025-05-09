@@ -51,4 +51,9 @@ public class SalaryController {
     public ApiResponse getCurrentSalary(@PathVariable Long employeeId) {
         return ApiResponse.success(salaryService.getSalaryByEmployeeId(employeeId));
     }
+
+    @GetMapping("/calculate")
+    public ApiResponse calculateSalary(@RequestParam String employeeCode, @RequestParam String monthYear) {
+        return ApiResponse.success(salaryService.calculateSalary(employeeCode, monthYear));
+    }
 }

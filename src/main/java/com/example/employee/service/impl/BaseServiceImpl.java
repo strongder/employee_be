@@ -76,4 +76,5 @@ public abstract class BaseServiceImpl<T, ID> implements BaseService<T, ID> {
     protected abstract <Res> Res convertToResponse(T entity, Class<Res> responseType);
 
     public abstract ID softDelete(ID id);
+
 }

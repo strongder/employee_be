@@ -139,6 +139,15 @@ public class ContractServiceImpl extends BaseServiceImpl<Contract, Long> impleme
         ).toList();
     }
 
+    @Override
+    public Object findAll()
+    {
+        List<Contract> lists = contractRepository.findContractsByDeletedFalse();
+        return lists.stream()
+                .map(contract -> convertToResponse(contract, ContractResponse.class))
+                .toList();
+    }
+
 
 
 }

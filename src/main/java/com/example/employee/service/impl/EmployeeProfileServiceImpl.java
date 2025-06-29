@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
 public class EmployeeProfileServiceImpl extends BaseServiceImpl<EmployeeProfile, Long> implements EmployeeProfileService {
@@ -112,6 +113,14 @@ public class EmployeeProfileServiceImpl extends BaseServiceImpl<EmployeeProfile,
     }
 
     @Override
+    public Object findAll() {
+        List<EmployeeProfile> lists = employeeProfileRepository.findEmployeeProfilesByDeleteFalse();
+        return lists.stream()
+                .map(employee -> convertToResponse(employee, EmployeeProfileResponse.class))
+                .toList();
+    }
+
+    @Override
     public String changeAvatar(ChangeAvatarRequest request) {
         EmployeeProfile employeeProfile = employeeProfileRepository.findById(request.getEmployeeId())
                 .orElseThrow(() -> new AppException(ErrorResponse.ENTITY_NOT_FOUND));
@@ -134,11 +143,9 @@ public class EmployeeProfileServiceImpl extends BaseServiceImpl<EmployeeProfile,
     {
         LocalDate now = LocalDate.now();
         String datePart = now.format(DateTimeFormatter.ofPattern("yyyy"));
-
         // Đếm số nhân viên đã tạo trong tháng hiện tại
         long countThisMonth = employeeProfileRepository.countByMonth(now.getYear());
         long nextNumber = countThisMonth + 1;
-
         return String.format("EMP%s%04d", datePart, nextNumber); // Ví dụ: EMP20240003
     }
 

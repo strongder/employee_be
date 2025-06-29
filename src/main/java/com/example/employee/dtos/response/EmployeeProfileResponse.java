@@ -29,6 +29,7 @@ public class EmployeeProfileResponse {
     private String bankAccountNumber;
     private DepartmentResponse department;
     private PositionResponse position;
+    private boolean isDeleted;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String createdBy;

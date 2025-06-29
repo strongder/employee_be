@@ -35,8 +35,4 @@ public class EmployeeProfile extends  BaseEntity{
     @ManyToOne
     @JoinColumn(name = "position_id")
     private Position position;
-
-
-
-
 }

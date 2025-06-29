@@ -11,7 +11,6 @@ import com.example.employee.model.Attendance;
 import com.example.employee.repository.AccountRepository;
 import com.example.employee.repository.AttendanceRepository;
 import com.example.employee.repository.EmployeeProfileRepository;
-import com.example.employee.service.AccountService;
 import com.example.employee.service.AttendanceService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
@@ -20,7 +19,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -119,6 +117,14 @@ public class AttendanceServiceImpl extends BaseServiceImpl<Attendance, Long> imp
         Long employeeId = account.getEmployeeProfile().getId();
         List<Attendance> attendances = attendanceRepository.findByEmployeeId(employeeId);
         return attendances.stream()
+                .map(attendance -> modelMapper.map(attendance, AttendanceResponse.class))
+                .toList();
+    }
+
+    @Override
+    public Object findAll() {
+        List<Attendance> list = attendanceRepository.findAttendancesByDeletedFalse();
+        return list.stream()
                 .map(attendance -> modelMapper.map(attendance, AttendanceResponse.class))
                 .toList();
     }

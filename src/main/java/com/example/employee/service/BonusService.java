@@ -11,4 +11,5 @@ public interface BonusService extends BaseService<Bonus, Long> {
      Object search(BaseSearchRequest request, Class<BonusResponse> bonusResponseClass);
 
      List<BonusResponse> getBonusByEmployeeId(Long employeeId);
+     Object findAll();
 }

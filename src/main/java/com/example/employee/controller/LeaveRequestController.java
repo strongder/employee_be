@@ -41,7 +41,7 @@ public class LeaveRequestController {
     }
     @GetMapping("/all")
     public ApiResponse getAll() {
-        return ApiResponse.success(leaveRequestService.findAll(LeaveRequestResponse.class));
+        return ApiResponse.success(leaveRequestService.findAll());
     }
 
     @PutMapping("/change-status")

@@ -1,6 +1,7 @@
 package com.example.employee.service.impl;
 
 import com.example.employee.dtos.request.BaseSearchRequest;
+import com.example.employee.dtos.request.CreateDepartmentRequest;
 import com.example.employee.dtos.response.BaseSearchResponse;
 import com.example.employee.dtos.response.DepartmentResponse;
 import com.example.employee.exception.AppException;
@@ -13,6 +14,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class DepartmentServiceImpl extends BaseServiceImpl<Department, Long> implements DepartmentService {
@@ -54,7 +57,25 @@ public class DepartmentServiceImpl extends BaseServiceImpl<Department, Long> imp
     }
 
     @Override
+    public DepartmentResponse update(Long id, CreateDepartmentRequest request) {
+        Department existingDepartment = departmentRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorResponse.ENTITY_NOT_FOUND));
+        modelMapper.map(request, existingDepartment);
+        Department updatedDepartment = departmentRepository.save(existingDepartment);
+        return modelMapper.map(updatedDepartment, DepartmentResponse.class);
+    }
+
+    @Override
     public BaseSearchResponse<DepartmentResponse> search(BaseSearchRequest request, Class<DepartmentResponse> responseType) {
         return searchUtils.search(Department.class,request, department -> convertToResponse(department, responseType));
     }
+
+    @Override
+    public Object findAll() {
+        List<Department> list = departmentRepository.findDepartmentsByDeletedFalse();
+        return list.stream()
+                .map(department -> modelMapper.map(department, DepartmentResponse.class))
+                .toList();
+    }
+
 }

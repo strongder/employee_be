@@ -19,6 +19,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AccountServiceImpl extends BaseServiceImpl<Account, Long> implements AccountService {
 
@@ -127,6 +129,14 @@ public class AccountServiceImpl extends BaseServiceImpl<Account, Long> implement
 
     public BaseSearchResponse<AccountResponse> search(BaseSearchRequest request, Class<AccountResponse> responseType) {
         return searchUtils.search(Account.class, request, account ->  convertToResponse(account, responseType));
+    }
+
+    @Override
+    public Object findAll() {
+        List<Account> lists = accountRepository.findAccountsByDeletedFalse();
+        return lists.stream()
+                .map(account -> convertToResponse(account, AccountResponse.class))
+                .toList();
     }
 
 }

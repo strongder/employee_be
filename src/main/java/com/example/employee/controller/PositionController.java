@@ -46,6 +46,6 @@ public class PositionController {
 
     @GetMapping("/all")
     public ApiResponse getAll() {
-        return ApiResponse.success(positionService.findAll(PositionResponse.class));
+        return ApiResponse.success(positionService.findAll());
     }
 }

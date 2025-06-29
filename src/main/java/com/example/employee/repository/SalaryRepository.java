@@ -13,4 +13,7 @@ public interface SalaryRepository extends JpaRepository<Salary, Long> {
 
     @Query("SELECT s FROM Salary s WHERE s.employee.code = ?1 AND s.monthYear = ?2")
     Optional<Salary> findByEmployeeAndDate(String employeeCode, String monthYear);
+
+    @Query("SELECT s FROM Salary s WHERE s.isDeleted = false")
+    List<Salary> findSalariesByDeletedFalse();
 }

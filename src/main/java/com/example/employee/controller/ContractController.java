@@ -45,7 +45,7 @@ public class ContractController {
     //getAll
     @GetMapping("/all")
     public ApiResponse getAll() {
-        return ApiResponse.success(contractService.findAll(ContractResponse.class));
+        return ApiResponse.success(contractService.findAll());
     }
     @GetMapping("/{employeeId}/employee")
     public ApiResponse getContractByEmployee(@PathVariable Long employeeId) {

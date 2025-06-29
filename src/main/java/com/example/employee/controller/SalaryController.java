@@ -44,7 +44,7 @@ public class SalaryController {
 
     @GetMapping("/all")
     public ApiResponse getAll() {
-        return ApiResponse.success(salaryService.findAll(SalaryResponse.class));
+        return ApiResponse.success(salaryService.findAll());
     }
 
     @GetMapping("/{employeeId}/employee")

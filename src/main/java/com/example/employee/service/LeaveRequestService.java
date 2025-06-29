@@ -19,4 +19,6 @@ public interface LeaveRequestService extends BaseService<LeaveRequest, Long> {
     Object changeStatus(ChangeStatusLeaveRequet request);
 
     List<LeaveRequestResponse> getLeaveRequestByEmployeeId(Long employeeId);
+
+    Object findAll();
 }

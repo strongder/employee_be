@@ -15,6 +15,7 @@ public interface EmployeeProfileService extends BaseService<EmployeeProfile, Lon
     EmployeeProfileResponse create(CreateEmployeeRequest request);
 
     BaseSearchResponse<EmployeeProfileResponse> search(BaseSearchRequest request, Class<EmployeeProfileResponse> responseType);
+    Object findAll();
 
     String changeAvatar(ChangeAvatarRequest avatar);
 }

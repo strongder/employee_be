@@ -24,14 +24,12 @@ public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-
-
     @Autowired
     private JwtUtils jwtUtils;
-
-
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest authRequest) {
+        log.info("authRequest: {}", authRequest);
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
         );
@@ -41,28 +39,5 @@ public class AuthController {
         AuthResponse authResponse = new AuthResponse("Đăng nhập thành công", token);
         return new ResponseEntity<>(authResponse, HttpStatus.OK);
 
-    }
-
-
-    @PostMapping("/refresh-token")
-    public ResponseEntity<ApiResponse> refreshToken(@RequestBody Map<String, String> body) {
-        String refreshToken = body.get("refreshToken");
-        String email = jwtUtils.extractAllClaimsRefresh(refreshToken).getSubject();
-        boolean isValid = jwtUtils.isValidRefreshToken(refreshToken);
-        if (!isValid) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(ApiResponse.builder()
-                            .message("Refresh token failed")
-                            .build()
-                    );
-        } else {
-            String token = jwtUtils.generateToken(email);
-            AuthResponse authResponse = new AuthResponse("Refresh token success", token);
-            return ResponseEntity.ok(ApiResponse.builder()
-                    .message("Refresh token success")
-                    .result(authResponse)
-                    .build()
-            );
-        }
     }
 }

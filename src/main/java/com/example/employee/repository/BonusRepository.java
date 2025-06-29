@@ -16,4 +16,6 @@ public interface BonusRepository extends JpaRepository<Bonus, Long> {
                                               @Param("startDate") LocalDate startDate,
                                               @Param("endDate") LocalDate endDate);
 
+    @Query("SELECT b FROM Bonus b WHERE b.isDeleted = false")
+    List<Bonus> findBonusesByDeletedFalse();
 }

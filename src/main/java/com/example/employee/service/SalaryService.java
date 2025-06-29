@@ -14,4 +14,6 @@ public interface SalaryService extends BaseService<Salary, Long> {
 
     List<SalaryResponse> getSalaryByEmployeeId(Long employeeId);
     CalculatorSalaryResponse calculateSalary(String employeeCode, String monthYear);
+
+    Object findAll();
 }

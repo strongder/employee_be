@@ -17,7 +17,7 @@ public class AttendanceController {
 
     @GetMapping("/all")
     public ApiResponse getAllAttendance() {
-        return ApiResponse.success(attendanceService.findAll(AttendanceResponse.class));
+        return ApiResponse.success(attendanceService.findAll());
     }
 
     @PostMapping("/create")

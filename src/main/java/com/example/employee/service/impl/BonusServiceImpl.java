@@ -90,4 +90,12 @@ public class BonusServiceImpl extends BaseServiceImpl<Bonus, Long> implements Bo
                 .map(Bonus::getBonusAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
+    public Object findAll()
+    {
+        List<Bonus> lists = bonusRepository.findBonusesByDeletedFalse();
+        return lists.stream()
+                .map(bonus -> convertToResponse(bonus, BonusResponse.class))
+                .toList();
+    }
 }

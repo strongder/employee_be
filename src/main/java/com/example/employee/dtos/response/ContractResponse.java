@@ -17,6 +17,7 @@ public class ContractResponse {
     private LocalDate startDate;
     private LocalDate endDate;
     private BigDecimal monthlySalary;
+    private boolean isDeleted;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String createdBy;

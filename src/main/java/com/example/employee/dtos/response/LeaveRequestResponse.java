@@ -16,6 +16,7 @@ public class LeaveRequestResponse {
     private LeaveStatus status;
     private String description;
     private String approvedBy;
+    private boolean isDeleted;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String createdBy;

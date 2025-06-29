@@ -22,7 +22,7 @@ public class DepartmentController {
 
     @PutMapping("/update/{id}")
     public ApiResponse update(@PathVariable Long id, @RequestBody CreateDepartmentRequest request) {
-        return ApiResponse.success(departmentService.update(id, request, DepartmentResponse.class));
+        return ApiResponse.success(departmentService.update(id, request));
     }
 
     @GetMapping("/{id}")
@@ -44,6 +44,6 @@ public class DepartmentController {
 
     @GetMapping("/all")
     public ApiResponse getAll() {
-        return ApiResponse.success(departmentService.findAll(DepartmentResponse.class));
+        return ApiResponse.success(departmentService.findAll());
     }
 }

@@ -43,7 +43,7 @@ public class EmployeeController {
     }
     @GetMapping("/all")
     public ApiResponse getAll() {
-        return ApiResponse.success(employeeService.findAll(EmployeeProfileResponse.class));
+        return ApiResponse.success(employeeService.findAll());
     }
 
     @GetMapping("/{employeeId}")

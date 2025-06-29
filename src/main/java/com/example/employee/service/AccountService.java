@@ -18,4 +18,6 @@ public interface AccountService extends BaseService<Account, Long> {
 
     Long softDelete(Long id);
     BaseSearchResponse<AccountResponse> search(BaseSearchRequest request, Class<AccountResponse> responseType);
+
+    Object findAll();
 }

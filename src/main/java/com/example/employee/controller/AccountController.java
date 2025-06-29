@@ -23,7 +23,7 @@ public class AccountController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ApiResponse delete(Long id) {
+    public ApiResponse delete(@PathVariable  Long id) {
         return ApiResponse.success(accountService.softDelete(id));
     }
 
@@ -49,7 +49,7 @@ public class AccountController {
 
     @GetMapping("/all")
     public ApiResponse getAll() {
-        return ApiResponse.success(accountService.findAll(AccountResponse.class));
+        return ApiResponse.success(accountService.findAll());
     }
 
     @PutMapping("/lock/{id}")

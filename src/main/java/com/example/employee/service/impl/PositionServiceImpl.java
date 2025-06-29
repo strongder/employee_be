@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class PositionServiceImpl extends BaseServiceImpl<Position, Long> implements PositionService {
@@ -61,5 +63,13 @@ public class PositionServiceImpl extends BaseServiceImpl<Position, Long> impleme
         return searchUtils.search(Position.class,
                 request,
                 position -> convertToResponse(position, responseType));
+    }
+
+    @Override
+    public Object findAll() {
+        List<Position> list = positionRepository.findPositionsByDeletedFalse();
+        return list.stream()
+                .map(position -> modelMapper.map(position, PositionResponse.class))
+                .toList();
     }
 }

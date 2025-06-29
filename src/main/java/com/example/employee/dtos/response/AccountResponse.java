@@ -9,6 +9,7 @@ public class AccountResponse {
     private String username;
     private String status;
     private String role;
+    private boolean isDeleted;
     private String createdAt;
     private String updatedAt;
     private String createdBy;

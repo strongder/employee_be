@@ -42,6 +42,10 @@ public class SearchUtils<T> {
         if (searchRequest.getEndDate() != null) {
             predicates.add(cb.lessThanOrEqualTo(root.get("createdAt"), searchRequest.getEndDate().atTime(23, 59, 59)));
         }
+
+        // isDelete bang false ko phai search request
+        predicates.add(cb.equal(root.get("isDeleted"), false));
+
         query.where(cb.and(predicates.toArray(new Predicate[0])));
         // Sắp xếp
         Sort.Direction direction = Sort.Direction.fromString(searchRequest.getSortDir());
@@ -57,7 +61,6 @@ public class SearchUtils<T> {
 
         List<T> results = typedQuery.getResultList();
         List<R> transformedResults = results.stream().map(converter).collect(Collectors.toList());
-
 
 
         // Tạo metadata (ví dụ: thời gian thực thi)

@@ -14,4 +14,6 @@ public interface ContractService extends BaseService<Contract, Long> {
     ContractResponse update(Long id, CreateContractRequest request) throws IOException;
 
     List<ContractResponse> getContractByEmployeeId(Long employeeId);
+
+    Object findAll();
 }

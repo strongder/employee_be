@@ -15,6 +15,7 @@ public class AttendanceResponse {
     private LocalTime checkOut;
     private String status; // Ví dụ: PRESENT, LATE, ABSENT
     private float workHours;
+    private boolean isDeleted;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String createdBy;

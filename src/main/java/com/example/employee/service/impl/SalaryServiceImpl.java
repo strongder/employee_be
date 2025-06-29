@@ -7,8 +7,10 @@ import com.example.employee.dtos.response.CalculatorSalaryResponse;
 import com.example.employee.dtos.response.SalaryResponse;
 import com.example.employee.exception.AppException;
 import com.example.employee.exception.ErrorResponse;
+import com.example.employee.model.Contract;
 import com.example.employee.model.EmployeeProfile;
 import com.example.employee.model.Salary;
+import com.example.employee.repository.ContractRepository;
 import com.example.employee.repository.EmployeeProfileRepository;
 import com.example.employee.repository.SalaryRepository;
 import com.example.employee.service.SalaryService;
@@ -18,8 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SalaryServiceImpl extends BaseServiceImpl<Salary, Long> implements SalaryService {
@@ -36,6 +38,8 @@ public class SalaryServiceImpl extends BaseServiceImpl<Salary, Long> implements 
     private BonusServiceImpl bonusServiceImpl;
     @Autowired
     private ContractServiceImpl contractServiceImpl;
+    @Autowired
+    private ContractRepository contractRepository;
 
     public SalaryServiceImpl(JpaRepository<Salary, Long> repository) {
         super(repository);
@@ -109,8 +113,23 @@ public class SalaryServiceImpl extends BaseServiceImpl<Salary, Long> implements 
         CalculatorSalaryResponse calculatorSalaryResponse = new CalculatorSalaryResponse();
         calculatorSalaryResponse.setEmployeeCode(employeeCode);
         calculatorSalaryResponse.setTotalBonus(bonusServiceImpl.calculaorBonusByEmployeeAndDate(employeeCode, monthYear));
-        calculatorSalaryResponse.setSalary(contractServiceImpl.findById(employeeProfile.getId()).getMonthlySalary());
+        calculatorSalaryResponse.setSalary(calcSalaryByContract(employeeProfile.getId()));
         calculatorSalaryResponse.setMonthYear(monthYear);
         return calculatorSalaryResponse;
+    }
+
+    @Override
+    public Object findAll() {
+        List<Salary> list = salaryRepository.findSalariesByDeletedFalse();
+        return list.stream()
+                .map(salary -> modelMapper.map(salary, SalaryResponse.class))
+                .toList();
+    }
+
+    public BigDecimal calcSalaryByContract(Long employeeId){
+        List<Contract> contracts = contractRepository.findByEmployeeId(employeeId);
+        return BigDecimal.valueOf(contracts.stream()
+                .mapToDouble(contract -> contract.getMonthlySalary().doubleValue())
+                .sum());
     }
 }

@@ -17,7 +17,6 @@ public class Account extends BaseEntity {
     private Long id;
     private String username;
     private String passwordHash;
-
     private String status;  // active, inactive, locked
     private RoleEnum role;
     @OneToOne

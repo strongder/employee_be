@@ -46,7 +46,7 @@ public class BonusController {
 
     @GetMapping("/all")
     public ApiResponse getAll() {
-        return ApiResponse.success(bonusService.findAll(BonusResponse.class));
+        return ApiResponse.success(bonusService.findAll());
     }
 
     @GetMapping("/{employeeId}/employee")

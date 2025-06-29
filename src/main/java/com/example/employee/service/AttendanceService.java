@@ -12,4 +12,6 @@ public interface AttendanceService extends BaseService<Attendance, Long> {
     AttendanceResponse checkIn(CheckInRequest request);
     AttendanceResponse checkOut(CheckInRequest request);
     List<AttendanceResponse> getAttendanceByEmployeeId();
+
+    Object findAll();
 }

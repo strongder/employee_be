@@ -97,4 +97,12 @@ public class LeaveRequestServiceImpl extends BaseServiceImpl<LeaveRequest, Long>
                 leave -> convertToResponse(leave, LeaveRequestResponse.class)
         ).toList();
     }
+
+    @Override
+    public Object findAll() {
+        List<LeaveRequest> lists = leaveRequestRepository.findLeaveRequestsByDeletedFalse();
+        return lists.stream()
+                .map(leave -> convertToResponse(leave, LeaveRequestResponse.class))
+                .toList();
+    }
 }

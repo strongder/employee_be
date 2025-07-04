@@ -21,6 +21,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -113,7 +116,7 @@ public class SalaryServiceImpl extends BaseServiceImpl<Salary, Long> implements 
         CalculatorSalaryResponse calculatorSalaryResponse = new CalculatorSalaryResponse();
         calculatorSalaryResponse.setEmployeeCode(employeeCode);
         calculatorSalaryResponse.setTotalBonus(bonusServiceImpl.calculaorBonusByEmployeeAndDate(employeeCode, monthYear));
-        calculatorSalaryResponse.setSalary(calcSalaryByContract(employeeProfile.getId()));
+        calculatorSalaryResponse.setSalary(calcSalaryByContract(employeeProfile.getId(), monthYear));
         calculatorSalaryResponse.setMonthYear(monthYear);
         return calculatorSalaryResponse;
     }
@@ -126,10 +129,18 @@ public class SalaryServiceImpl extends BaseServiceImpl<Salary, Long> implements 
                 .toList();
     }
 
-    public BigDecimal calcSalaryByContract(Long employeeId){
+    public BigDecimal calcSalaryByContract(Long employeeId, String monthYear) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yyyy");
+        YearMonth ym = YearMonth.parse(monthYear, formatter);
+        LocalDate endOfMonth = ym.atEndOfMonth();
+
         List<Contract> contracts = contractRepository.findByEmployeeId(employeeId);
-        return BigDecimal.valueOf(contracts.stream()
-                .mapToDouble(contract -> contract.getMonthlySalary().doubleValue())
-                .sum());
+
+        return contracts.stream()
+                .filter(contract ->
+                        contract.getEndDate() == null || !contract.getEndDate().isBefore(endOfMonth.plusDays(1))
+                )
+                .map(Contract::getMonthlySalary)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

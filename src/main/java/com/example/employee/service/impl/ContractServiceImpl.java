@@ -17,6 +17,7 @@ import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -148,6 +149,16 @@ public class ContractServiceImpl extends BaseServiceImpl<Contract, Long> impleme
                 .toList();
     }
 
+    //scheduled moi ngay chuyen hop dong neu qua ngay thi chuyen trang thai EXPIRED
 
-
+     // CHAYJ MOI GIO CHA
+     @Scheduled(cron = "0 0 0 * * ?") // Mỗi ngày lúc 00:00
+     public void updateExpiredContracts() {
+         LocalDate today = LocalDate.now();
+         List<Contract> contracts = contractRepository.findByEndDateBeforeAndContractStatus(today, "ACTIVE");
+         for (Contract contract : contracts) {
+             contract.setContractStatus("EXPIRED");
+             contractRepository.save(contract);
+         }
+     }
 }

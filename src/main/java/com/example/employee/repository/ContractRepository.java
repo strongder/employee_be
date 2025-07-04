@@ -16,4 +16,5 @@ public interface ContractRepository extends JpaRepository<Contract, Long> {
 
    @Query("SELECT c FROM Contract c WHERE c.isDeleted = false")
     List<Contract> findContractsByDeletedFalse();
+    List<Contract> findByEndDateBeforeAndContractStatus(LocalDate today, String active);
 }
